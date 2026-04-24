@@ -790,14 +790,20 @@
     </div>
 
     <div style="display: flex; justify-content: center;">
-      <a class="twitter-timeline"
-         data-width="720"
-         data-height="600"
-         data-theme="dark"
-         data-chrome="nofooter noborders"
-         href="https://twitter.com/BLACKPHANTOM76">
-        Tweets de @BLACKPHANTOM76
-      </a>
+      <div id="twitter-placeholder" style="width:720px; height:600px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#111; border-radius:16px; color:#aaa; gap:12px; cursor:pointer;" onclick="loadTwitterTimeline()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="#aaa"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <span style="font-size:14px;">Haz clic para cargar el feed de @BLACKPHANTOM76</span>
+      </div>
+      <div id="twitter-embed" style="display:none;">
+        <a class="twitter-timeline"
+           data-width="720"
+           data-height="600"
+           data-theme="dark"
+           data-chrome="nofooter noborders transparent"
+           href="https://twitter.com/BLACKPHANTOM76">
+          Tweets de @BLACKPHANTOM76
+        </a>
+      </div>
     </div>
 
   </section>
@@ -942,7 +948,39 @@
 
   <!-- JavaScript -->
   <script src="js/main.js"></script>
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script>
+  // Twitter: carga bajo demanda para evitar 429 (rate limit)
+  var twitterLoaded = false;
+
+  function loadTwitterTimeline() {
+    if (twitterLoaded) return;
+    twitterLoaded = true;
+    document.getElementById('twitter-placeholder').style.display = 'none';
+    document.getElementById('twitter-embed').style.display = 'block';
+    var s = document.createElement('script');
+    s.src = 'https://platform.twitter.com/widgets.js';
+    s.charset = 'utf-8';
+    s.onload = function() {
+      if (window.twttr && window.twttr.widgets) {
+        window.twttr.widgets.load(document.getElementById('twitter-embed'));
+      }
+    };
+    document.body.appendChild(s);
+  }
+
+  // Auto-carga cuando el usuario hace scroll hasta la sección (IntersectionObserver)
+  (function() {
+    var placeholder = document.getElementById('twitter-placeholder');
+    if (!placeholder || !('IntersectionObserver' in window)) return;
+    var observer = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) {
+        loadTwitterTimeline();
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
+    observer.observe(placeholder);
+  })();
+  </script>
   <script>
   function handleSubmit() {
     var name = document.getElementById('bp-name').value.trim();
