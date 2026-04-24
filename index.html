@@ -739,26 +739,42 @@
       <div class="section-divider"></div>
     </div>
 
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: flex-start;">
 
-      <!-- Video -->
-      <iframe id="twitchvid" height="480" width="720" allowfullscreen></iframe>
+      <!-- Player via Twitch Embed SDK oficial -->
+      <div id="twitch-player"></div>
 
-      <!-- Chat -->
-      <iframe id="chat" height="480" width="350"></iframe>
-
-      <script>
-        (function () {
-          var host    = window.location.hostname;
-          var channel = 'moonred1212';
-          document.getElementById('twitchvid').src =
-            'https://player.twitch.tv/?channel=' + channel + '&parent=' + host;
-          document.getElementById('chat').src =
-            'https://www.twitch.tv/embed/' + channel + '/chat?parent=' + host;
-        })();
-      </script>
+      <!-- Chat via Twitch Embed SDK oficial -->
+      <div id="twitch-chat"></div>
 
     </div>
+
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+    <script>
+      (function () {
+        var channel = 'moonred1212';
+        var parent  = window.location.hostname;
+
+        new Twitch.Embed('twitch-player', {
+          width: 720,
+          height: 480,
+          channel: channel,
+          parent: [parent],
+          autoplay: false,
+          muted: true,
+          layout: 'video'
+        });
+
+        new Twitch.Embed('twitch-chat', {
+          width: 350,
+          height: 480,
+          channel: channel,
+          parent: [parent],
+          autoplay: false,
+          layout: 'chat'
+        });
+      })();
+    </script>
 
   </section>
 </div>
@@ -774,11 +790,14 @@
     </div>
 
     <div style="display: flex; justify-content: center;">
-      <iframe id="twittera"
-        src="https://nitter.net/BLACKPHANTOM76"
-        width="720"
-        height="600">
-      </iframe>
+      <a class="twitter-timeline"
+         data-width="720"
+         data-height="600"
+         data-theme="dark"
+         data-chrome="nofooter noborders"
+         href="https://twitter.com/BLACKPHANTOM76">
+        Tweets de @BLACKPHANTOM76
+      </a>
     </div>
 
   </section>
