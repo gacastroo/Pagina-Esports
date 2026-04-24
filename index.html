@@ -741,38 +741,40 @@
 
     <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: flex-start;">
 
-      <!-- Player via Twitch Embed SDK oficial -->
-      <div id="twitch-player"></div>
+      <!-- Player de Twitch via iframe con parent dinámico -->
+      <div id="twitch-player" style="border-radius:12px; overflow:hidden; background:#0e0e10;"></div>
 
-      <!-- Chat via Twitch Embed SDK oficial -->
-      <div id="twitch-chat"></div>
+      <!-- Chat de Twitch via iframe con parent dinámico -->
+      <div id="twitch-chat" style="border-radius:12px; overflow:hidden; background:#0e0e10;"></div>
 
     </div>
 
-    <script src="https://embed.twitch.tv/embed/v1.js"></script>
     <script>
       (function () {
         var channel = 'moonred1212';
-        var parent  = window.location.hostname;
+        var parent  = window.location.hostname || 'localhost';
 
-        new Twitch.Embed('twitch-player', {
-          width: 720,
-          height: 480,
-          channel: channel,
-          parent: [parent],
-          autoplay: false,
-          muted: true,
-          layout: 'video'
-        });
+        // Player iframe
+        var playerIframe = document.createElement('iframe');
+        playerIframe.src = 'https://player.twitch.tv/?channel=' + channel + '&parent=' + parent + '&autoplay=false&muted=true';
+        playerIframe.width  = '720';
+        playerIframe.height = '480';
+        playerIframe.allowFullscreen = true;
+        playerIframe.setAttribute('frameborder', '0');
+        playerIframe.setAttribute('scrolling', 'no');
+        playerIframe.setAttribute('allow', 'autoplay; fullscreen');
+        playerIframe.style.borderRadius = '12px';
+        document.getElementById('twitch-player').appendChild(playerIframe);
 
-        new Twitch.Embed('twitch-chat', {
-          width: 350,
-          height: 480,
-          channel: channel,
-          parent: [parent],
-          autoplay: false,
-          layout: 'chat'
-        });
+        // Chat iframe
+        var chatIframe = document.createElement('iframe');
+        chatIframe.src = 'https://www.twitch.tv/embed/' + channel + '/chat?parent=' + parent + '&darkpopout';
+        chatIframe.width  = '350';
+        chatIframe.height = '480';
+        chatIframe.setAttribute('frameborder', '0');
+        chatIframe.setAttribute('scrolling', 'yes');
+        chatIframe.style.borderRadius = '12px';
+        document.getElementById('twitch-chat').appendChild(chatIframe);
       })();
     </script>
 
@@ -790,21 +792,51 @@
     </div>
 
     <div style="display: flex; justify-content: center;">
-      <div id="twitter-placeholder" style="width:720px; height:600px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#111; border-radius:16px; color:#aaa; gap:12px; cursor:pointer;" onclick="loadTwitterTimeline()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="#aaa"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        <span style="font-size:14px;">Haz clic para cargar el feed de @BLACKPHANTOM76</span>
-      </div>
-      <div id="twitter-embed" style="display:none;">
-        <a class="twitter-timeline"
-           data-width="720"
-           data-height="600"
-           data-theme="dark"
-           data-chrome="nofooter noborders transparent"
-           href="https://twitter.com/BLACKPHANTOM76">
-          Tweets de @BLACKPHANTOM76
-        </a>
+      <!-- Nitter embed: alternativa sin rate-limit a los widgets oficiales de Twitter/X -->
+      <div id="nitter-container" style="width:720px; height:600px; border-radius:16px; overflow:hidden; background:#111;">
+        <iframe
+          id="nitter-iframe"
+          src="https://nitter.net/BLACKPHANTOM76/with_replies"
+          width="720"
+          height="600"
+          frameborder="0"
+          scrolling="yes"
+          style="border-radius:16px; color-scheme: dark;"
+          loading="lazy"
+          title="Feed de @BLACKPHANTOM76 en Nitter"
+        ></iframe>
       </div>
     </div>
+
+    <!-- Fallback: si Nitter no carga, muestra enlace directo -->
+    <div id="nitter-fallback" style="display:none; text-align:center; margin-top:16px;">
+      <p style="color:#aaa; font-size:14px;">No se pudo cargar el feed. Puedes verlo directamente en:</p>
+      <a href="https://nitter.net/BLACKPHANTOM76" target="_blank" rel="noopener noreferrer"
+         style="color:#8c52ff; text-decoration:underline;">nitter.net/BLACKPHANTOM76</a>
+      &nbsp;|&nbsp;
+      <a href="https://x.com/BLACKPHANTOM76" target="_blank" rel="noopener noreferrer"
+         style="color:#8c52ff; text-decoration:underline;">x.com/BLACKPHANTOM76</a>
+    </div>
+
+    <script>
+    (function() {
+      var iframe = document.getElementById('nitter-iframe');
+      var fallback = document.getElementById('nitter-fallback');
+      // Si el iframe no carga en 8s, muestra el fallback
+      var timer = setTimeout(function() {
+        if (fallback) fallback.style.display = 'block';
+      }, 8000);
+      if (iframe) {
+        iframe.addEventListener('load', function() {
+          clearTimeout(timer);
+        });
+        iframe.addEventListener('error', function() {
+          clearTimeout(timer);
+          if (fallback) fallback.style.display = 'block';
+        });
+      }
+    })();
+    </script>
 
   </section>
 </div>
@@ -948,39 +980,7 @@
 
   <!-- JavaScript -->
   <script src="js/main.js"></script>
-  <script>
-  // Twitter: carga bajo demanda para evitar 429 (rate limit)
-  var twitterLoaded = false;
 
-  function loadTwitterTimeline() {
-    if (twitterLoaded) return;
-    twitterLoaded = true;
-    document.getElementById('twitter-placeholder').style.display = 'none';
-    document.getElementById('twitter-embed').style.display = 'block';
-    var s = document.createElement('script');
-    s.src = 'https://platform.twitter.com/widgets.js';
-    s.charset = 'utf-8';
-    s.onload = function() {
-      if (window.twttr && window.twttr.widgets) {
-        window.twttr.widgets.load(document.getElementById('twitter-embed'));
-      }
-    };
-    document.body.appendChild(s);
-  }
-
-  // Auto-carga cuando el usuario hace scroll hasta la sección (IntersectionObserver)
-  (function() {
-    var placeholder = document.getElementById('twitter-placeholder');
-    if (!placeholder || !('IntersectionObserver' in window)) return;
-    var observer = new IntersectionObserver(function(entries) {
-      if (entries[0].isIntersecting) {
-        loadTwitterTimeline();
-        observer.disconnect();
-      }
-    }, { threshold: 0.3 });
-    observer.observe(placeholder);
-  })();
-  </script>
   <script>
   function handleSubmit() {
     var name = document.getElementById('bp-name').value.trim();
