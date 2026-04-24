@@ -36,6 +36,7 @@
       <li><a href="#twitch">Twitch</a></li>
       <li><a href="#tienda">Tienda</a></li>
       <li><a href="#sponsors">Sponsors</a></li>
+      <li><a href="/html/index.html">Daniel</a></li>
     </ul>
 
     <div class="nav-social">
@@ -741,19 +742,21 @@
     <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
 
       <!-- Video -->
-      <iframe id="twitchvid"
-        src="https://player.twitch.tv/?channel=moonred1212&parent=black-team.vercel.app&parent=localhost"
-        height="480"
-        width="720"
-        allowfullscreen>
-      </iframe>
+      <iframe id="twitchvid" height="480" width="720" allowfullscreen></iframe>
 
       <!-- Chat -->
-      <iframe id="chat"
-        src="https://www.twitch.tv/embed/moonred1212/chat?parent=black-team.vercel.app&parent=localhost"
-        height="480"
-        width="350">
-      </iframe>
+      <iframe id="chat" height="480" width="350"></iframe>
+
+      <script>
+        (function () {
+          var host    = window.location.hostname;
+          var channel = 'moonred1212';
+          document.getElementById('twitchvid').src =
+            'https://player.twitch.tv/?channel=' + channel + '&parent=' + host;
+          document.getElementById('chat').src =
+            'https://www.twitch.tv/embed/' + channel + '/chat?parent=' + host;
+        })();
+      </script>
 
     </div>
 
