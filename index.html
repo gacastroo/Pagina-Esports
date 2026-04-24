@@ -277,7 +277,7 @@
       </section>
   </div><!-- /.section-wrap #roster -->
 
-    <!-- ═══════════════════════════════════════
+  <!-- ═══════════════════════════════════════
        STATS — Estadísticas en Vivo (Riot API)
   ════════════════════════════════════════ -->
   <div class="section-wrap" id="stats">
@@ -448,7 +448,7 @@
       </div>
 
       <!-- ── CARD 3: Soulen (Mid) ── -->
-      <div class="stat-card" data-player="BLACK Soulen" data-tag="Luka" data-region="euw1" data-role="Mid Lane" data-nickname="BLACK Soulen">
+      <div class="stat-card" data-player="Jinshi" data-tag="7403" data-region="euw1" data-role="Mid Lane" data-nickname="Jinshi">
         <div class="stat-card-loading">
           <div class="stat-spinner"></div>
           <span>Cargando...</span>
@@ -504,7 +504,7 @@
       </div>
 
       <!-- ── CARD 4: Espeon (Bot) ── -->
-      <div class="stat-card" data-player="Espeön" data-tag="17EUW" data-region="euw1" data-role="Bot Lane" data-nickname="Espeön">
+      <div class="stat-card" data-player="Espeon" data-tag="2847" data-region="euw1" data-role="Bot Lane" data-nickname="Espeon">
         <div class="stat-card-loading">
           <div class="stat-spinner"></div>
           <span>Cargando...</span>
@@ -560,7 +560,7 @@
       </div>
 
       <!-- ── CARD 5: Nyx (Support) ── -->
-      <div class="stat-card" data-player="nyx" data-tag="ak4" data-region="euw1" data-role="Support" data-nickname="Nyx">
+      <div class="stat-card" data-player="Nyx" data-tag="ak4" data-region="euw1" data-role="Support" data-nickname="Nyx">
         <div class="stat-card-loading">
           <div class="stat-spinner"></div>
           <span>Cargando...</span>
@@ -738,13 +738,13 @@
       <div class="section-divider"></div>
     </div>
 
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: flex-start;">
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: flex-start; width: 100%; box-sizing: border-box;">
 
       <!-- Player de Twitch via iframe con parent dinámico -->
-      <div id="twitch-player" style="border-radius:12px; overflow:hidden; background:#0e0e10;"></div>
+      <div id="twitch-player" style="flex: 1 1 320px; min-width: 0; max-width: 720px; border-radius:12px; overflow:hidden; background:#0e0e10; aspect-ratio: 16/9;"></div>
 
       <!-- Chat de Twitch via iframe con parent dinámico -->
-      <div id="twitch-chat" style="border-radius:12px; overflow:hidden; background:#0e0e10;"></div>
+      <div id="twitch-chat" style="flex: 0 1 340px; min-width: 0; width: 100%; border-radius:12px; overflow:hidden; background:#0e0e10; min-height: 400px;"></div>
 
     </div>
 
@@ -756,23 +756,23 @@
         // Player iframe
         var playerIframe = document.createElement('iframe');
         playerIframe.src = 'https://player.twitch.tv/?channel=' + channel + '&parent=' + parent + '&autoplay=false&muted=true';
-        playerIframe.width  = '720';
-        playerIframe.height = '480';
+        playerIframe.width  = '100%';
+        playerIframe.height = '100%';
         playerIframe.allowFullscreen = true;
         playerIframe.setAttribute('frameborder', '0');
         playerIframe.setAttribute('scrolling', 'no');
         playerIframe.setAttribute('allow', 'autoplay; fullscreen');
-        playerIframe.style.borderRadius = '12px';
+        playerIframe.style.cssText = 'border-radius:12px; width:100%; height:100%; display:block;';
         document.getElementById('twitch-player').appendChild(playerIframe);
 
         // Chat iframe
         var chatIframe = document.createElement('iframe');
         chatIframe.src = 'https://www.twitch.tv/embed/' + channel + '/chat?parent=' + parent + '&darkpopout';
-        chatIframe.width  = '350';
-        chatIframe.height = '480';
+        chatIframe.width  = '100%';
+        chatIframe.height = '100%';
         chatIframe.setAttribute('frameborder', '0');
         chatIframe.setAttribute('scrolling', 'yes');
-        chatIframe.style.borderRadius = '12px';
+        chatIframe.style.cssText = 'border-radius:12px; width:100%; height:100%; min-height:400px; display:block;';
         document.getElementById('twitch-chat').appendChild(chatIframe);
       })();
     </script>
@@ -790,17 +790,17 @@
       <div class="section-divider"></div>
     </div>
 
-    <div style="display: flex; justify-content: center;">
+    <div style="display: flex; justify-content: center; width: 100%; box-sizing: border-box;">
       <!-- Nitter embed: alternativa sin rate-limit a los widgets oficiales de Twitter/X -->
-      <div id="nitter-container" style="width:720px; height:600px; border-radius:16px; overflow:hidden; background:#111;">
+      <div id="nitter-container" style="width: 100%; max-width: 720px; height: 600px; border-radius:16px; overflow:hidden; background:#111;">
         <iframe
           id="nitter-iframe"
           src="https://nitter.net/BLACKPHANTOM76/with_replies"
-          width="720"
-          height="600"
+          width="100%"
+          height="100%"
           frameborder="0"
           scrolling="yes"
-          style="border-radius:16px; color-scheme: dark;"
+          style="border-radius:16px; color-scheme: dark; width:100%; height:100%; display:block;"
           loading="lazy"
           title="Feed de @BLACKPHANTOM76 en Nitter"
         ></iframe>
