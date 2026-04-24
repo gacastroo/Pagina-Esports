@@ -1,0 +1,14 @@
+# Variables de entorno — NUNCA subir al repositorio
+.env
+.env.local
+.env.production
+
+# Dependencias
+node_modules/
+
+# Vercel
+.vercel
+
+# OS
+.DS_Store
+Thumbs.db

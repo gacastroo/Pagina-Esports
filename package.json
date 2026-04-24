@@ -1,0 +1,9 @@
+{
+  "name": "black-phantom-esports",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Black Phantom Esports — Página oficial",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
